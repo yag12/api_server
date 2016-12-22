@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="api_server" basedir="." default="menu">
+
+	<!--
+	**************************************************
+	Setting 
+	**************************************************
+	-->
+	<property name="PRJ_NAME" value="${ant.project.name}" />
+	<property name="BASE_DIR" value="." />
+
+	<!-- Directory Setting -->
+	<property name="SRC_DIR" value="yts" />
+	<property name="TEST_DIR" value="tests" />
+	<property name="LIBS_DIR" value="library" />
+	<property name="DOC_DIR" value="${BASE_DIR}/doc" />
+	
+	<!-- import setting files -->
+	<import file="${BASE_DIR}/phing/setting/srv.xml" />
+
+	<!-- define custom tasks -->
+    <taskdef name="execmysql" classname="phing.tasks.nctask.ExecMySQLTask" />
+    <taskdef name="mysqldump" classname="phing.tasks.nctask.MySQLDumpTask" />
+    <taskdef name="convstored" classname="phing.tasks.nctask.ConvStoredTask" />
+	
+	<!--
+	**************************************************
+	Task Setting
+	**************************************************
+	-->
+
+	<target name="menu">
+		<echo>
+
+		Tasks for Local windows PC.
+		----------------------------------------
+		create         : create databases and users.
+		install        : create database, tables, procedures and insert template datas. 
+		update         : update template databases and stored procedures with converting.
+		backup         : backup database.
+		setup          : create -> install -> update.
+		reset          : install -> update.
+		setting        : setting
+		</echo>
+	</target>
+	
+	<!--
+	**************************************************	
+	Target for Deploy Debug Srv
+	**************************************************
+	-->
+	<target name="create">
+		<execmysql mysqlpath="${mysqlpath}" host="${host}" port="${port}" username="${username}" password="${password}" dbname="" sqlpath = "${create_dir}/create_db.sql" />
+		<execmysql mysqlpath="${mysqlpath}" host="${host}" port="${port}" username="${username}" password="${password}" dbname="" sqlpath="${create_dir}/create_user.sql" />
+	</target>
+
+	<target name="install">
+		<echo message="creating databases ... " />
+	    <execmysql mysqlpath="${mysqlpath}" host="${host}" port="${port}" username="${username}" password="${password}" dbname="${dbname}" sqlpath="${db_dir}" />
+		<echo message="done. " />
+	</target>
+	
+	<target name="update">
+		<echo message="creating stored procedures ... " />
+	    <execmysql mysqlpath="${mysqlpath}" host="${host}" port="${port}" username="${username}" password="${password}" dbname="${dbname}" sqlpath="${stored_dir}" />
+		<echo message="done. " />
+	</target>
+
+	<target name="backup">
+      <mysqldump mysqldumppath="${mysqldumppath}" host="${host}" port="${port}" username="${username}" password="${password}" dbname="${dbname}" outpath="${backup_dir}" />
+	</target>
+	
+	<target name="setup" depends="create, install, update" />	
+
+	<target name="reset" depends="install, update" />
+	
+	<!--
+	**************************************************	
+	
+	**************************************************
+	-->
+	<target name="setting">
+		<chmod file="${BASE_DIR}/log" mode="0777" />
+	</target>
+
+</project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project>
+
+	<property name="mysqlpath" value="mysql" />
+	<property name="mysqldumppath" value="mysqldump" />
+	
+	<property name="host" value="127.0.0.1" />
+	<property name="port" value="3306" />
+	<property name="username" value="root" />
+	<property name="password" value="1" />
+	<property name="dbname" value="api_server" />
+
+	<property name="db_dir" value="data/db/db" />
+	<property name="create_dir" value="data/db/create" />
+	<property name="stored_dir" value="data/db/stored" />
+	<property name="backup_dir" value="data/db/backup" />
+
+</project>
+

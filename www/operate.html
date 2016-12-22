@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>operate page</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+function request(params, callback){
+	var url = "./";
+	params.client_hash = 'ASDDSGASDASDWTDFVXVXCVDSFWERWZFDSDFH';
+	params.guid = 0;
+	params.os = 1;
+	params.version = "1.0.0";
+	$.ajax({
+		url: url,
+		data: params,
+		type: "POST",
+		dataType: "json",
+		success: function(data){
+			callback(data);
+		}
+	});
+}
+
+$(document).ready(function(){
+	request({'index': 'index'}, function(data){
+		if(typeof data.serverInfo != "undefined" && data.serverInfo != null){
+			$("#aos_server").val(data.serverInfo.aos);
+			$("#ios_server").val(data.serverInfo.ios);
+
+			$("#version_client").val(data.serverInfo.version);
+		}
+	});
+
+	$("#initialize").click(function(){
+		request({'index_initialize': 'initialize'}, function(data){
+			alert("데이터 초기화 완료");
+		});
+	});
+
+	$("#server_update").click(function(){
+		var server = $("#all_server").val();
+		var ios = $("#ios_server").val();
+		var aos = $("#aos_server").val();
+		var client = $("#version_client").val();
+		var param = {
+			'aos': aos,
+			'ios': ios,
+			'version': client,
+		};
+		request({'index_serverInfo': {'info': param}}, function(data){
+			alert("서버상태 변경 완료");
+		});
+	});
+});
+</script>
+</head>
+<body>
+
+<input type="button" value="데이터 초기화" id="initialize" />
+<hr />
+
+AOS <select id="aos_server"><option value="1">운영</option><option value="0">유지보수</option></select>
+IOS <select id="ios_server"><option value="1">운영</option><option value="0">유지보수</option></select>
+&nbsp;&nbsp;
+client version : <input type="text" value="1" size="4" id="version_client" />
+<input type="button" value="서버상태 변경" id="server_update" />
+<hr />
+
+</body>
+</html>

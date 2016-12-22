@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>parament test page</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#submitBtn").click(function(){
+		var url = "./";
+		var method = {};
+		var request = $("#request").val();
+		if(request != "") method = JSON.parse(request);
+		method['client_hash'] = 'ASDDSGASDASDWTDFVXVXCVDSFWERWZFDSDFH';
+
+		$.ajax({
+			url: url,
+			data: method,
+			type: "POST",
+			dataType: "json",
+			success: function(data){
+				if(data != "undefined"){
+					var val = JSON.stringify(data);
+					$("#response").val(val);
+				}
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+
+<div style="width:500px; height:600px; float:left; margin:10px;">
+	<textarea id="request" style="width:100%; height:100%;">{
+	"auth":{
+		"acc_id": "1234567890"
+	},
+	"guid":0,
+	"os":1,
+	"version":"1.0.0",
+	"accid":"1234567890"
+}</textarea>
+	<input type="button" value="확인" id="submitBtn" />
+</div>
+<div style="height:600px; float:left; padding-top:200px; margin:4px;">=></div>
+<div style="width:500px; height:600px; float:left; margin:10px;">
+	<textarea id="response" style="width:100%; height:100%;"></textarea>
+</div>
+
+</body>
+</html>
